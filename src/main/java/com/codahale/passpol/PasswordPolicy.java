@@ -14,11 +14,11 @@
 
 package com.codahale.passpol;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.function.Predicate;
@@ -62,9 +62,11 @@ public class PasswordPolicy implements Predicate<String> {
       final long codePoints = s.codePoints().count();
       return minLength <= codePoints && codePoints <= maxLength;
     };
-    final URL resource = Resources.getResource(RESOURCE_NAME);
-    this.weakPasswords = Resources.readLines(resource, StandardCharsets.UTF_8)
-                                  .stream().filter(length).collect(ImmutableSet.toImmutableSet());
+    this.weakPasswords = Resources.asCharSource(Resources.getResource(RESOURCE_NAME), UTF_8)
+                                  .openBufferedStream()
+                                  .lines()
+                                  .filter(length)
+                                  .collect(ImmutableSet.toImmutableSet());
   }
 
   /**
@@ -77,7 +79,7 @@ public class PasswordPolicy implements Predicate<String> {
    * @return a series of bytes suitable for hashing
    */
   public byte[] normalize(String password) {
-    return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
+    return Normalizer.normalize(password, Form.NFKC).getBytes(UTF_8);
   }
 
   /**
