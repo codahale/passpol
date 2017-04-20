@@ -58,7 +58,10 @@ public class PasswordPolicy implements Predicate<String> {
    * @throws IOException if the weak password list cannot be loaded from the classpath
    */
   public PasswordPolicy(int minLength, int maxLength) throws IOException {
-    this.length = s -> s.length() >= minLength && s.length() <= maxLength;
+    this.length = s -> {
+      final int codePoints = s.codePointCount(0, s.length());
+      return codePoints >= minLength && codePoints <= maxLength;
+    };
     final URL resource = Resources.getResource(RESOURCE_NAME);
     this.weakPasswords = Resources.readLines(resource, StandardCharsets.UTF_8)
                                   .stream().filter(length).collect(ImmutableSet.toImmutableSet());

@@ -27,22 +27,24 @@ public class PasswordPolicyTest {
 
   @Test
   public void validPasswords() throws Exception {
-    final PasswordPolicy policy = new PasswordPolicy();
-    qt().forAll(strings().basicMultilingualPlaneAlphabet().ofLengthBetween(8, 64))
+    final PasswordPolicy policy = new PasswordPolicy(8, 64);
+    qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
+        .check(policy);
+    qt().forAll(strings().ascii().ofLengthBetween(8, 64))
         .check(policy);
   }
 
   @Test
   public void shortPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(10, 64);
-    qt().forAll(strings().basicMultilingualPlaneAlphabet().ofLengthBetween(1, 9))
+    qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(policy.negate());
   }
 
   @Test
   public void longPasswords() throws Exception {
-    final PasswordPolicy policy = new PasswordPolicy(8, 32);
-    qt().forAll(strings().basicMultilingualPlaneAlphabet().ofLengthBetween(33, 300))
+    final PasswordPolicy policy = new PasswordPolicy(8, 20);
+    qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(policy.negate());
   }
 
