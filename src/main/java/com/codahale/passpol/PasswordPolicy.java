@@ -59,8 +59,8 @@ public class PasswordPolicy implements Predicate<String> {
    */
   public PasswordPolicy(int minLength, int maxLength) throws IOException {
     this.length = s -> {
-      final int codePoints = s.codePointCount(0, s.length());
-      return codePoints >= minLength && codePoints <= maxLength;
+      final long codePoints = s.codePoints().count();
+      return minLength <= codePoints && codePoints <= maxLength;
     };
     final URL resource = Resources.getResource(RESOURCE_NAME);
     this.weakPasswords = Resources.readLines(resource, StandardCharsets.UTF_8)
