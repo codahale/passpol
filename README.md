@@ -25,8 +25,15 @@ import java.util.Arrays;
 class Example {
   void doIt() throws IOException {
     final PasswordPolicy policy = new PasswordPolicy();
+    
+    // validate good passwords
     System.out.println(policy.test("this is a good, long password")); 
-    System.out.println(policy.test("1234567890"));
+    
+    // validate bad passwords
+    System.out.println(policy.test("password"));
+    
+    // convert a unicode password to a normalized byte array suitable for hashing
+    final byte[] bytes = policy.normalize("✊🏻 unicode 🔥 password");
   } 
 }
 ```
