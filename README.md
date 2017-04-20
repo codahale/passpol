@@ -15,6 +15,8 @@ requirements.
 </dependency>
 ```
 
+Depends on Guava for their fast, immutable set implementation.
+
 ## Use the thing
 
 ```java
