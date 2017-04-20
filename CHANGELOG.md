@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.1.2: 2017-04-19
+
+* Improve codepoint counting.
+
 ## v0.1.1: 2017-04-19
 
 * Count Unicode codepoints, not characters.
