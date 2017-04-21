@@ -26,7 +26,8 @@ public class Download {
 
   public static void main(String[] args) throws Exception {
     try (InputStream in = new URL(LIST_URL).openStream();
-        OutputStream out = new FileOutputStream("src/main/resources/weak-passwords.txt")) {
+        OutputStream out = new FileOutputStream(
+            "src/main/resources/com/codahale/passpol/weak-passwords.txt")) {
       ByteStreams.copy(in, out);
     }
   }

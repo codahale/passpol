@@ -35,7 +35,7 @@ import java.util.function.Predicate;
  */
 public class PasswordPolicy implements Predicate<String> {
 
-  private static final String RESOURCE_NAME = "weak-passwords.txt";
+  private static final String RESOURCE_NAME = "com/codahale/passpol/weak-passwords.txt";
 
   private final Predicate<String> length;
   private final ImmutableSet<String> weakPasswords;
