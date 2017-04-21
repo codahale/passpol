@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.function.Predicate;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -33,6 +35,7 @@ import java.util.function.Predicate;
  * @see <a href="https://pages.nist.gov/800-63-3/">Draft NIST SP-800-63B</a>
  * @see <a href="https://cry.github.io/nbp/">NBP</a>
  */
+@Immutable
 public class PasswordPolicy implements Predicate<String> {
 
   private static final String RESOURCE_NAME = "com/codahale/passpol/weak-passwords.txt";
@@ -78,7 +81,7 @@ public class PasswordPolicy implements Predicate<String> {
    * @param password an arbitrary string
    * @return a series of bytes suitable for hashing
    */
-  public byte[] normalize(String password) {
+  public byte[] normalize(@Nonnull String password) {
     return Normalizer.normalize(password, Form.NFKC).getBytes(UTF_8);
   }
 
@@ -89,7 +92,7 @@ public class PasswordPolicy implements Predicate<String> {
    * @return whether or not {@code password} is acceptable
    */
   @Override
-  public boolean test(String password) {
-    return password != null && length.test(password) && !weakPasswords.contains(password);
+  public boolean test(@Nonnull String password) {
+    return length.test(password) && !weakPasswords.contains(password);
   }
 }
