@@ -12,17 +12,19 @@
  * limitations under the License.
  */
 
-package com.codahale;
+package com.codahale.passpol.benchmarks;
 
 import com.codahale.passpol.PasswordPolicy;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import org.openjdk.jmh.Main;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.runner.RunnerException;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -30,6 +32,7 @@ import org.openjdk.jmh.annotations.State;
 public class Benchmarks {
 
   private static final String PASSWORD = "this is a decent password";
+
   private final PasswordPolicy policy;
 
   public Benchmarks() {
@@ -38,6 +41,10 @@ public class Benchmarks {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static void main(String[] args) throws IOException, RunnerException {
+    Main.main(args);
   }
 
   @Benchmark
