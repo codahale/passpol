@@ -14,19 +14,19 @@
 
 package com.codahale.passpol.tests;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.quicktheories.quicktheories.QuickTheory.qt;
 import static org.quicktheories.quicktheories.generators.SourceDSL.arbitrary;
 import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
 
 import com.codahale.passpol.PasswordPolicy;
 import java.nio.charset.StandardCharsets;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PasswordPolicyTest {
+class PasswordPolicyTest {
 
   @Test
-  public void validPasswords() throws Exception {
+  void validPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(8, 64);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(policy);
@@ -35,31 +35,32 @@ public class PasswordPolicyTest {
   }
 
   @Test
-  public void shortPasswords() throws Exception {
+  void shortPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(10, 64);
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(policy.negate());
   }
 
   @Test
-  public void longPasswords() throws Exception {
+  void longPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(8, 20);
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(policy.negate());
   }
 
   @Test
-  public void weakPasswords() throws Exception {
+  void weakPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
     qt().forAll(arbitrary().sequence("password", "liverpool"))
         .check(policy.negate());
   }
 
   @Test
-  public void normalize() throws Exception {
+  void normalize() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
     final byte[] bytes = policy.normalize("Ä\uFB03n");
-    assertArrayEquals(new byte[]{-61, -124, 102, 102, 105, 110}, bytes);
+    assertThat(bytes)
+        .containsExactly(-61, -124, 102, 102, 105, 110);
 
     qt().forAll(strings().basicLatinAlphabet().ofLengthBetween(10, 20))
         .check(s -> s.equals(new String(policy.normalize(s), StandardCharsets.UTF_8)));
