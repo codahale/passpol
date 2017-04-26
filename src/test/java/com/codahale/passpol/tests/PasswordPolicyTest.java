@@ -14,7 +14,7 @@
 
 package com.codahale.passpol.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.quicktheories.quicktheories.QuickTheory.qt;
 import static org.quicktheories.quicktheories.generators.SourceDSL.arbitrary;
 import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
@@ -58,9 +58,7 @@ class PasswordPolicyTest {
   @Test
   void normalize() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
-    final byte[] bytes = policy.normalize("Ä\uFB03n");
-    assertThat(bytes)
-        .containsExactly(-61, -124, 102, 102, 105, 110);
+    assertArrayEquals(new byte[]{-61, -124, 102, 102, 105, 110}, policy.normalize("Ä\uFB03n"));
 
     qt().forAll(strings().basicLatinAlphabet().ofLengthBetween(10, 20))
         .check(s -> s.equals(new String(policy.normalize(s), StandardCharsets.UTF_8)));
