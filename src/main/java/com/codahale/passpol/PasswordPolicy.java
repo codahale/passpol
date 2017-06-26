@@ -60,7 +60,7 @@ public class PasswordPolicy {
    * @param minLength the minimum length of passwords
    * @param maxLength the maximum length of passwords
    */
-  public PasswordPolicy(@Nonnegative int minLength, int maxLength) {
+  public PasswordPolicy(@Nonnegative int minLength, @Nonnegative int maxLength) {
     this.minLength = minLength;
     this.maxLength = maxLength;
     this.weakPasswords = readPasswords(minLength, maxLength);
