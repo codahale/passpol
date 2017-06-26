@@ -112,6 +112,6 @@ public class PasswordPolicy {
    */
   @CheckReturnValue
   public boolean isValid(String password) {
-    return checkLen(password, minLength, maxLength) && weakPasswords.containsKey(password);
+    return checkLen(password, minLength, maxLength) && !weakPasswords.containsKey(password);
   }
 }
