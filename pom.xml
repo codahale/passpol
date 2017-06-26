@@ -20,7 +20,7 @@
 
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.1.5-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <name>passpol</name>
   <url>https://github.com/codahale/passpol</url>
   <description>
@@ -66,6 +66,7 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>22.0</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

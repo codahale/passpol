@@ -14,15 +14,18 @@
 
 package com.codahale.passpol;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Resources;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import java.util.function.Predicate;
-import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -36,12 +39,10 @@ import javax.annotation.concurrent.Immutable;
  * @see <a href="https://cry.github.io/nbp/">NBP</a>
  */
 @Immutable
-public class PasswordPolicy implements Predicate<String> {
+public class PasswordPolicy {
 
-  private static final String RESOURCE_NAME = "com/codahale/passpol/weak-passwords.txt";
-
-  private final Predicate<String> length;
-  private final ImmutableSet<String> weakPasswords;
+  private final int minLength, maxLength;
+  private final ConcurrentHashMap<String, Boolean> weakPasswords;
 
   /**
    * Creates a {@link PasswordPolicy} with a minimum password length of {@code 8} and a maximum
@@ -58,18 +59,32 @@ public class PasswordPolicy implements Predicate<String> {
    *
    * @param minLength the minimum length of passwords
    * @param maxLength the maximum length of passwords
-   * @throws IOException if the weak password list cannot be loaded from the classpath
    */
-  public PasswordPolicy(int minLength, int maxLength) throws IOException {
-    this.length = s -> {
-      final long codePoints = s.codePoints().count();
-      return minLength <= codePoints && codePoints <= maxLength;
-    };
-    this.weakPasswords = Resources.asCharSource(Resources.getResource(RESOURCE_NAME), UTF_8)
-                                  .openBufferedStream()
-                                  .lines()
-                                  .filter(length)
-                                  .collect(ImmutableSet.toImmutableSet());
+  public PasswordPolicy(@Nonnegative int minLength, int maxLength) {
+    this.minLength = minLength;
+    this.maxLength = maxLength;
+    this.weakPasswords = readPasswords(minLength, maxLength);
+  }
+
+  private static ConcurrentHashMap<String, Boolean> readPasswords(int minLength, int maxLength) {
+    try (
+        InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
+        InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
+        BufferedReader br = new BufferedReader(r)
+    ) {
+      final Map<String, Boolean> p = new HashMap<>();
+      br.lines()
+        .filter(s -> checkLen(s, minLength, maxLength))
+        .forEach(s -> p.put(s, Boolean.TRUE));
+      return new ConcurrentHashMap<>(p);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static boolean checkLen(String s, int min, int max) {
+    final long len = s.codePoints().count();
+    return min <= len && len <= max;
   }
 
   /**
@@ -81,8 +96,9 @@ public class PasswordPolicy implements Predicate<String> {
    * @param password an arbitrary string
    * @return a series of bytes suitable for hashing
    */
-  public byte[] normalize(@Nonnull String password) {
-    return Normalizer.normalize(password, Form.NFKC).getBytes(UTF_8);
+  @CheckReturnValue
+  public byte[] normalize(String password) {
+    return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
   }
 
   /**
@@ -91,8 +107,8 @@ public class PasswordPolicy implements Predicate<String> {
    * @param password a candidate password
    * @return whether or not {@code password} is acceptable
    */
-  @Override
-  public boolean test(@Nonnull String password) {
-    return length.test(password) && !weakPasswords.contains(password);
+  @CheckReturnValue
+  public boolean isValid(String password) {
+    return checkLen(password, minLength, maxLength) && weakPasswords.containsKey(password);
   }
 }

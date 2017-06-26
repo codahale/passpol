@@ -49,7 +49,7 @@ public class Benchmarks {
 
   @Benchmark
   public boolean test() {
-    return policy.test(PASSWORD);
+    return policy.isValid(PASSWORD);
   }
 
   @Benchmark

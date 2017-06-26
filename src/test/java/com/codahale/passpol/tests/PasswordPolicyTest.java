@@ -29,30 +29,30 @@ class PasswordPolicyTest {
   void validPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(8, 64);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
-        .check(policy);
+        .check(policy::isValid);
     qt().forAll(strings().ascii().ofLengthBetween(8, 64))
-        .check(policy);
+        .check(policy::isValid);
   }
 
   @Test
   void shortPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(10, 64);
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
-        .check(policy.negate());
+        .check(password -> !policy.isValid(password));
   }
 
   @Test
   void longPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(8, 20);
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
-        .check(policy.negate());
+        .check(password -> !policy.isValid(password));
   }
 
   @Test
   void weakPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
     qt().forAll(arbitrary().sequence("password", "liverpool"))
-        .check(policy.negate());
+        .check(password -> !policy.isValid(password));
   }
 
   @Test

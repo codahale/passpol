@@ -11,21 +11,17 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.1.4</version>
+  <version>0.2.0</version>
 </dependency>
 ```
-
-Depends on Guava for their fast, immutable set implementation.
 
 ## Use the thing
 
 ```java
 import com.codahale.passpol.PasswordPolicy;
-import java.io.IOException;
-import java.util.Arrays;
 
 class Example {
-  void doIt() throws IOException {
+  void doIt() {
     final PasswordPolicy policy = new PasswordPolicy();
     
     // validate good passwords
