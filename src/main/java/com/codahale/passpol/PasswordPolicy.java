@@ -61,6 +61,9 @@ public class PasswordPolicy {
    * @param maxLength the maximum length of passwords
    */
   public PasswordPolicy(@Nonnegative int minLength, @Nonnegative int maxLength) {
+    if (maxLength < minLength) {
+      throw new IllegalArgumentException("minLength must be less than maxLength");
+    }
     this.minLength = minLength;
     this.maxLength = maxLength;
     this.weakPasswords = readPasswords(minLength, maxLength);
