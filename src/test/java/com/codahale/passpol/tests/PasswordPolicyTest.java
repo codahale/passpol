@@ -15,9 +15,9 @@
 package com.codahale.passpol.tests;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.quicktheories.quicktheories.QuickTheory.qt;
-import static org.quicktheories.quicktheories.generators.SourceDSL.arbitrary;
-import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
+import static org.quicktheories.QuickTheory.qt;
+import static org.quicktheories.generators.SourceDSL.arbitrary;
+import static org.quicktheories.generators.SourceDSL.strings;
 
 import com.codahale.passpol.PasswordPolicy;
 import java.nio.charset.StandardCharsets;
@@ -51,7 +51,7 @@ class PasswordPolicyTest {
   @Test
   void weakPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
-    qt().forAll(arbitrary().sequence("password", "liverpool"))
+    qt().forAll(arbitrary().pick("password", "liverpool"))
         .check(password -> !policy.isValid(password));
   }
 
