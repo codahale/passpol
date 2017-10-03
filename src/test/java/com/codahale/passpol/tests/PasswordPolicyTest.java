@@ -15,15 +15,13 @@
 package com.codahale.passpol.tests;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.quicktheories.QuickTheory.qt;
-import static org.quicktheories.generators.SourceDSL.arbitrary;
-import static org.quicktheories.generators.SourceDSL.strings;
 
 import com.codahale.passpol.PasswordPolicy;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
+import org.quicktheories.WithQuickTheories;
 
-class PasswordPolicyTest {
+class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void validPasswords() throws Exception {
