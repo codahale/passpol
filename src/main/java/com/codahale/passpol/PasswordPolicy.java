@@ -86,7 +86,7 @@ public class PasswordPolicy {
   }
 
   private static boolean checkLen(String s, int min, int max) {
-    final long len = s.codePoints().count();
+    final int len = s.codePointCount(0, s.length());
     return min <= len && len <= max;
   }
 
