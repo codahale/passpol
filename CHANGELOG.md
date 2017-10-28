@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.2.1: 2017-10-28
+
+* Simplified code point counting.
+
 ## v0.2.0: 2017-06-26
 
 * Remove Guice dependency.

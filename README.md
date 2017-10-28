@@ -11,7 +11,7 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
 </dependency>
 ```
 
