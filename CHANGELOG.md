@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.0: 2017-11-07
+
+* Increased weak password list to 100,000.
+
 ## v0.2.1: 2017-10-28
 
 * Simplified code point counting.

@@ -11,7 +11,7 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -38,7 +38,7 @@ class Example {
 
 ## How it works
 
-`PasswordPolicy` uses a list of 10,000 weak passwords from [Carey Li's
+`PasswordPolicy` uses a list of 100,000 weak passwords from [Carey Li's
 NBP](https://cry.github.io/nbp/) project. Passwords are checked for minimum length, maximum length,
 and weakness.
 
