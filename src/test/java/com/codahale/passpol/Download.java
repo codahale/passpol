@@ -22,7 +22,7 @@ import java.net.URL;
 
 public class Download {
 
-  private static final String LIST_URL = "https://raw.githubusercontent.com/cry/nbp/master/build_collection/top10000";
+  private static final String LIST_URL = "https://raw.githubusercontent.com/cry/nbp/master/build_collection/top100000";
 
   public static void main(String[] args) throws Exception {
     try (InputStream in = new URL(LIST_URL).openStream();
