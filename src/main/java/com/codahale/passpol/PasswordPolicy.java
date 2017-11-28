@@ -30,10 +30,10 @@ import javax.annotation.concurrent.Immutable;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
- * SP-800-63B}, which recommend passwords have a minimum required length, a maximum required
- * length, ad be checked against a list of weak passwords ({@code SP-800-63B 5.1.1.2}).
- * <p>
- * This uses a static list of 10,000 weak passwords downloaded from Carey Li's NBP project.
+ * SP-800-63B}, which recommend passwords have a minimum required length, a maximum required length,
+ * ad be checked against a list of weak passwords ({@code SP-800-63B 5.1.1.2}).
+ *
+ * <p>This uses a static list of 10,000 weak passwords downloaded from Carey Li's NBP project.
  *
  * @see <a href="https://pages.nist.gov/800-63-3/">Draft NIST SP-800-63B</a>
  * @see <a href="https://cry.github.io/nbp/">NBP</a>
@@ -70,15 +70,13 @@ public class PasswordPolicy {
   }
 
   private static ConcurrentHashMap<String, Boolean> readPasswords(int minLength, int maxLength) {
-    try (
-        InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
+    try (InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
         InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
-        BufferedReader br = new BufferedReader(r)
-    ) {
+        BufferedReader br = new BufferedReader(r)) {
       final Map<String, Boolean> p = new HashMap<>();
       br.lines()
-        .filter(s -> checkLen(s, minLength, maxLength))
-        .forEach(s -> p.put(s, Boolean.TRUE));
+          .filter(s -> checkLen(s, minLength, maxLength))
+          .forEach(s -> p.put(s, Boolean.TRUE));
       return new ConcurrentHashMap<>(p);
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -93,8 +91,8 @@ public class PasswordPolicy {
   /**
    * Normalizes the given password as Unicode NFKC and returns it as UTF-8 encoded bytes, ready to
    * be passed to a password hashing algorithm like {@code bcrypt}.
-   * <p>
-   * This is the process recommended in {@code NIST SP-800-63B 5.1.1.2}.
+   *
+   * <p>This is the process recommended in {@code NIST SP-800-63B 5.1.1.2}.
    *
    * @param password an arbitrary string
    * @return a series of bytes suitable for hashing

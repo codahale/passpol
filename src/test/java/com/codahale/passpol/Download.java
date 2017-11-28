@@ -22,12 +22,14 @@ import java.net.URL;
 
 public class Download {
 
-  private static final String LIST_URL = "https://raw.githubusercontent.com/cry/nbp/master/build_collection/top100000";
+  private static final String LIST_URL =
+      "https://raw.githubusercontent.com/cry/nbp/master/build_collection/top100000";
+  private static final String LIST_FILENAME =
+      "src/main/resources/com/codahale/passpol/weak-passwords.txt";
 
   public static void main(String[] args) throws Exception {
     try (InputStream in = new URL(LIST_URL).openStream();
-        OutputStream out = new FileOutputStream(
-            "src/main/resources/com/codahale/passpol/weak-passwords.txt")) {
+        OutputStream out = new FileOutputStream(LIST_FILENAME)) {
       ByteStreams.copy(in, out);
     }
   }

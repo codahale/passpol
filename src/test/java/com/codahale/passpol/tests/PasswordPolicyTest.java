@@ -26,10 +26,8 @@ class PasswordPolicyTest implements WithQuickTheories {
   @Test
   void validPasswords() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy(8, 64);
-    qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
-        .check(policy::isValid);
-    qt().forAll(strings().ascii().ofLengthBetween(8, 64))
-        .check(policy::isValid);
+    qt().forAll(strings().allPossible().ofLengthBetween(20, 30)).check(policy::isValid);
+    qt().forAll(strings().ascii().ofLengthBetween(8, 64)).check(policy::isValid);
   }
 
   @Test
@@ -56,7 +54,7 @@ class PasswordPolicyTest implements WithQuickTheories {
   @Test
   void normalize() throws Exception {
     final PasswordPolicy policy = new PasswordPolicy();
-    assertArrayEquals(new byte[]{-61, -124, 102, 102, 105, 110}, policy.normalize("Ä\uFB03n"));
+    assertArrayEquals(new byte[] {-61, -124, 102, 102, 105, 110}, policy.normalize("Ä\uFB03n"));
 
     qt().forAll(strings().basicLatinAlphabet().ofLengthBetween(10, 20))
         .check(s -> s.equals(new String(policy.normalize(s), StandardCharsets.UTF_8)));
