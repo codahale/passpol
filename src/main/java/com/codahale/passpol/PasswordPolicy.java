@@ -14,6 +14,9 @@
 
 package com.codahale.passpol;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnegative;
+import javax.annotation.concurrent.Immutable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,9 +27,6 @@ import java.text.Normalizer.Form;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnegative;
-import javax.annotation.concurrent.Immutable;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -41,16 +41,15 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class PasswordPolicy {
 
-  private final int minLength, maxLength;
+  private final int minLength;
+  private final int maxLength;
   private final ConcurrentHashMap<String, Boolean> weakPasswords;
 
   /**
    * Creates a {@link PasswordPolicy} with a minimum password length of {@code 8} and a maximum
    * password length of {@code 64}, as recommended in {@code SP-800-63B 5.1.1.2}.
-   *
-   * @throws IOException if the weak password list cannot be loaded from the classpath
    */
-  public PasswordPolicy() throws IOException {
+  public PasswordPolicy() {
     this(8, 64);
   }
 
@@ -79,7 +78,7 @@ public class PasswordPolicy {
           .forEach(s -> p.put(s, Boolean.TRUE));
       return new ConcurrentHashMap<>(p);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 
