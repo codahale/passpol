@@ -14,9 +14,6 @@
 
 package com.codahale.passpol;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnegative;
-import javax.annotation.concurrent.Immutable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +24,9 @@ import java.text.Normalizer.Form;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnegative;
+import javax.annotation.concurrent.Immutable;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code

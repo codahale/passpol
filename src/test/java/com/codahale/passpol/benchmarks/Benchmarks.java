@@ -33,15 +33,7 @@ public class Benchmarks {
 
   private static final String PASSWORD = "this is a decent password";
 
-  private final PasswordPolicy policy;
-
-  public Benchmarks() {
-    try {
-      this.policy = new PasswordPolicy();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
+  private final PasswordPolicy policy = new PasswordPolicy();
 
   public static void main(String[] args) throws IOException, RunnerException {
     Main.main(args);
