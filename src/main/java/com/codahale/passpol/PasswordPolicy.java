@@ -44,13 +44,15 @@ public class PasswordPolicy {
   private final int minLength;
   private final int maxLength;
   private final ConcurrentHashMap<String, Boolean> weakPasswords;
+  private final BreachDatabase breachDatabase;
 
   /**
    * Creates a {@link PasswordPolicy} with a minimum password length of {@code 8} and a maximum
-   * password length of {@code 64}, as recommended in {@code SP-800-63B 5.1.1.2}.
+   * password length of {@code 64}, as recommended in {@code SP-800-63B 5.1.1.2}. Does not specify a
+   * {@link BreachDatabase} instance.
    */
   public PasswordPolicy() {
-    this(8, 64);
+    this(8, 64, BreachDatabase.noop());
   }
 
   /**
@@ -58,14 +60,17 @@ public class PasswordPolicy {
    *
    * @param minLength the minimum length of passwords
    * @param maxLength the maximum length of passwords
+   * @param breachDatabase a {@link BreachDatabase} instance
    */
-  public PasswordPolicy(@Nonnegative int minLength, @Nonnegative int maxLength) {
+  public PasswordPolicy(
+      @Nonnegative int minLength, @Nonnegative int maxLength, BreachDatabase breachDatabase) {
     if (maxLength < minLength) {
       throw new IllegalArgumentException("minLength must be less than maxLength");
     }
     this.minLength = minLength;
     this.maxLength = maxLength;
     this.weakPasswords = readPasswords(minLength, maxLength);
+    this.breachDatabase = breachDatabase;
   }
 
   private static ConcurrentHashMap<String, Boolean> readPasswords(int minLength, int maxLength) {
@@ -97,7 +102,7 @@ public class PasswordPolicy {
    * @return a series of bytes suitable for hashing
    */
   @CheckReturnValue
-  public byte[] normalize(String password) {
+  public static byte[] normalize(String password) {
     return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
   }
 
@@ -121,6 +126,14 @@ public class PasswordPolicy {
 
     if (weakPasswords.containsKey(password)) {
       return Status.WEAK;
+    }
+
+    try {
+      if (breachDatabase.contains(password)) {
+        return Status.BREACHED;
+      }
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
     }
 
     return Status.OK;
