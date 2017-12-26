@@ -15,6 +15,7 @@
 package com.codahale.passpol.benchmarks;
 
 import com.codahale.passpol.PasswordPolicy;
+import com.codahale.passpol.Status;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.Main;
@@ -40,8 +41,8 @@ public class Benchmarks {
   }
 
   @Benchmark
-  public boolean test() {
-    return policy.isValid(PASSWORD);
+  public Status test() {
+    return policy.check(PASSWORD);
   }
 
   @Benchmark

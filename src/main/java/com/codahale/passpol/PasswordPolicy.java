@@ -102,13 +102,27 @@ public class PasswordPolicy {
   }
 
   /**
-   * Returns {@code true} if the given password is acceptable, {@code false} otherwise.
+   * Checks the acceptability of a candidate password.
    *
    * @param password a candidate password
-   * @return whether or not {@code password} is acceptable
+   * @return the status of {@code password}
    */
   @CheckReturnValue
-  public boolean isValid(String password) {
-    return checkLen(password, minLength, maxLength) && !weakPasswords.containsKey(password);
+  public Status check(String password) {
+    final int len = password.codePointCount(0, password.length());
+
+    if (len < minLength) {
+      return Status.TOO_SHORT;
+    }
+
+    if (len > maxLength) {
+      return Status.TOO_LONG;
+    }
+
+    if (weakPasswords.containsKey(password)) {
+      return Status.WEAK;
+    }
+
+    return Status.OK;
   }
 }

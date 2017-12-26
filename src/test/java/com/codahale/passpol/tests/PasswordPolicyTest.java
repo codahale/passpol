@@ -24,35 +24,37 @@ import org.quicktheories.WithQuickTheories;
 class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
-  void validPasswords() throws Exception {
+  void validPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(8, 64);
-    qt().forAll(strings().allPossible().ofLengthBetween(20, 30)).check(policy::isValid);
-    qt().forAll(strings().ascii().ofLengthBetween(8, 64)).check(policy::isValid);
+    qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
+        .check(p -> policy.check(p).isAcceptable());
+    qt().forAll(strings().ascii().ofLengthBetween(8, 64))
+        .check(p -> policy.check(p).isAcceptable());
   }
 
   @Test
-  void shortPasswords() throws Exception {
+  void shortPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(10, 64);
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
-        .check(password -> !policy.isValid(password));
+        .check(password -> !policy.check(password).isAcceptable());
   }
 
   @Test
-  void longPasswords() throws Exception {
+  void longPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(8, 20);
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
-        .check(password -> !policy.isValid(password));
+        .check(password -> !policy.check(password).isAcceptable());
   }
 
   @Test
-  void weakPasswords() throws Exception {
+  void weakPasswords() {
     final PasswordPolicy policy = new PasswordPolicy();
     qt().forAll(arbitrary().pick("password", "liverpool"))
-        .check(password -> !policy.isValid(password));
+        .check(password -> !policy.check(password).isAcceptable());
   }
 
   @Test
-  void normalize() throws Exception {
+  void normalize() {
     final PasswordPolicy policy = new PasswordPolicy();
     assertArrayEquals(new byte[] {-61, -124, 102, 102, 105, 110}, policy.normalize("Ä\uFB03n"));
 
