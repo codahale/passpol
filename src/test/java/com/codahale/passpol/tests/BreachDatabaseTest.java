@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.codahale.passpol.BreachDatabase;
 import java.io.IOException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class BreachDatabaseTest {
 
+  @Disabled
   @Test
   void haveIBeenPwned() throws IOException {
     assertTrue(BreachDatabase.haveIBeenPwned().contains("password"));
