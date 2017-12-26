@@ -18,7 +18,7 @@
 
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
   <name>passpol</name>
   <url>https://github.com/codahale/passpol</url>
   <description>
