@@ -133,7 +133,7 @@ public class PasswordPolicy {
         return Status.BREACHED;
       }
     } catch (IOException e) {
-      throw new IllegalStateException(e);
+      return Status.OK;
     }
 
     return Status.OK;
