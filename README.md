@@ -11,27 +11,28 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
 ## Use the thing
 
 ```java
+import com.codahale.passpol.BreachDatabase;
 import com.codahale.passpol.PasswordPolicy;
 
 class Example {
   void doIt() {
-    final PasswordPolicy policy = new PasswordPolicy();
+    final PasswordPolicy policy = new PasswordPolicy(8, 60, BreachDatabase.haveIBeenPwned());
     
     // validate good passwords
-    System.out.println(policy.test("this is a good, long password")); 
+    System.out.println(policy.check("this is a good, long password")); 
     
     // validate bad passwords
-    System.out.println(policy.test("password"));
+    System.out.println(policy.check("password"));
     
     // convert a unicode password to a normalized byte array suitable for hashing
-    final byte[] bytes = policy.normalize("✊🏻 unicode 🔥 password");
+    final byte[] bytes = PasswordPolicy.normalize("✊🏻 unicode 🔥 password");
   } 
 }
 ```
@@ -40,7 +41,9 @@ class Example {
 
 `PasswordPolicy` uses a list of 100,000 weak passwords from [Carey Li's
 NBP](https://cry.github.io/nbp/) project. Passwords are checked for minimum length, maximum length,
-and weakness.
+and weakness. In addition, passwords can also be checked against databases of passwords recovered
+from major breaches. passpol provides support for checking passwords against [Have I Been
+Pwned?](https://haveibeenpwned.com)'s collection of breached passwords.
 
 `PasswordPolicy` also provides the means to normalize Unicode passwords into a canonical byte array
 representation suitable for inputting into a password hashing algorithm like `bcrypt`.

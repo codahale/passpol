@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.4.0: 2017-12-26
+
+* Changed `PasswordPolicy` to return the reason for rejecting a password, if any.
+* Made `PasswordPolicy::normalize` static.
+* Added support for using breach databases, including Have I Been Pwned?.
+
 ## v0.3.0: 2017-11-07
 
 * Increased weak password list to 100,000.
