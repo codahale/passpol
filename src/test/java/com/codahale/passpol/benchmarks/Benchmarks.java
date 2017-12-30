@@ -47,6 +47,6 @@ public class Benchmarks {
 
   @Benchmark
   public byte[] normalize() {
-    return policy.normalize(PASSWORD);
+    return PasswordPolicy.normalize(PASSWORD);
   }
 }
