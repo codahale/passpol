@@ -21,9 +21,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.Immutable;
@@ -43,7 +42,7 @@ public class PasswordPolicy {
 
   private final int minLength;
   private final int maxLength;
-  private final ConcurrentHashMap<String, Boolean> weakPasswords;
+  private final Set<String> weakPasswords;
   private final BreachDatabase breachDatabase;
 
   /**
@@ -73,15 +72,11 @@ public class PasswordPolicy {
     this.breachDatabase = breachDatabase;
   }
 
-  private static ConcurrentHashMap<String, Boolean> readPasswords(int minLength, int maxLength) {
+  private static Set<String> readPasswords(int minLength, int maxLength) {
     try (InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
         InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader br = new BufferedReader(r)) {
-      final Map<String, Boolean> p = new HashMap<>();
-      br.lines()
-          .filter(s -> checkLen(s, minLength, maxLength))
-          .forEach(s -> p.put(s, Boolean.TRUE));
-      return new ConcurrentHashMap<>(p);
+      return br.lines().filter(s -> checkLen(s, minLength, maxLength)).collect(Collectors.toSet());
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
@@ -124,7 +119,7 @@ public class PasswordPolicy {
       return Status.TOO_LONG;
     }
 
-    if (weakPasswords.containsKey(password)) {
+    if (weakPasswords.contains(password)) {
       return Status.WEAK;
     }
 
