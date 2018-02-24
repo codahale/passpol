@@ -50,6 +50,6 @@ representation suitable for inputting into a password hashing algorithm like `bc
 
 ## License
 
-Copyright © 2017 Coda Hale
+Copyright © 2017-2018 Coda Hale
 
 Distributed under the Apache License 2.0.
