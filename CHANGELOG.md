@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.5.0: 2018-02-23
+
+* Changed the HaveIBeenPwned breach database to use their new, _k-anonymous_ backend.
+* Improve memory usage and performance slightly.
+
 ## v0.4.0: 2017-12-26
 
 * Changed `PasswordPolicy` to return the reason for rejecting a password, if any.
