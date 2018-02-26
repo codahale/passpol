@@ -35,6 +35,7 @@ class HaveIBeenPwned implements BreachDatabase {
       final String suffix = hash.substring(5);
       final String url = "https://api.pwnedpasswords.com/range/" + prefix;
       final HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+      conn.setRequestProperty("User-Agent", "passpol");
       if (conn.getResponseCode() != 200) {
         throw new IOException("Unexpected response from server: " + conn.getResponseCode());
       }
