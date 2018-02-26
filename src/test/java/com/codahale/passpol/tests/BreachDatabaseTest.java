@@ -20,12 +20,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.codahale.passpol.BreachDatabase;
 import java.io.IOException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BreachDatabaseTest {
 
-  @Ignore
   @Test
   public void haveIBeenPwned() throws IOException {
     assertTrue(BreachDatabase.haveIBeenPwned().contains("password"));
