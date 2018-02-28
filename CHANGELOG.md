@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.5.1: 2018-02-28
+
+* Added a `User-Agent` header to HaveIBeenPwned requests.
+
 ## v0.5.0: 2018-02-23
 
 * Changed the HaveIBeenPwned breach database to use their new, _k-anonymous_ backend.
