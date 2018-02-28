@@ -21,7 +21,7 @@
 
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.1</version>
   <name>passpol</name>
   <url>https://github.com/codahale/passpol</url>
   <description>
@@ -39,7 +39,7 @@
     <connection>scm:git:https://github.com/codahale/passpol.git</connection>
     <developerConnection>scm:git:https://github.com/codahale/passpol.git</developerConnection>
     <url>https://github.com/codahale/passpol</url>
-    <tag>HEAD</tag>
+    <tag>v0.5.1</tag>
   </scm>
   <developers>
     <developer>
@@ -313,7 +313,7 @@
           <mapping>
             <java>SLASHSTAR_STYLE</java>
           </mapping>
-          <useDefaultExcludes/>
+          <useDefaultExcludes />
           <excludes>
             <exclude>src/main/resources/**</exclude>
           </excludes>
