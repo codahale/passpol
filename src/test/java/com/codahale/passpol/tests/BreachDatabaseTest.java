@@ -15,23 +15,22 @@
  */
 package com.codahale.passpol.tests;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codahale.passpol.BreachDatabase;
 import java.io.IOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class BreachDatabaseTest {
+class BreachDatabaseTest {
 
   @Test
-  public void haveIBeenPwned() throws IOException {
-    assertTrue(BreachDatabase.haveIBeenPwned().contains("password"));
-    assertFalse(BreachDatabase.haveIBeenPwned().contains("8e29c409899d7782ef97"));
+  void haveIBeenPwned() throws IOException {
+    assertThat(BreachDatabase.haveIBeenPwned().contains("password")).isTrue();
+    assertThat(BreachDatabase.haveIBeenPwned().contains("8e29c409899d7782ef97")).isFalse();
   }
 
   @Test
-  public void noop() throws IOException {
-    assertFalse(BreachDatabase.noop().contains("woo"));
+  void noop() throws IOException {
+    assertThat(BreachDatabase.noop().contains("woo")).isFalse();
   }
 }

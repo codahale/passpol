@@ -15,19 +15,19 @@
  */
 package com.codahale.passpol.tests;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codahale.passpol.BreachDatabase;
 import com.codahale.passpol.PasswordPolicy;
 import com.codahale.passpol.Status;
 import java.nio.charset.StandardCharsets;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.quicktheories.WithQuickTheories;
 
-public class PasswordPolicyTest implements WithQuickTheories {
+class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
-  public void validPasswords() {
+  void validPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(8, 64, BreachDatabase.noop());
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(p -> policy.check(p) == Status.OK);
@@ -35,37 +35,37 @@ public class PasswordPolicyTest implements WithQuickTheories {
   }
 
   @Test
-  public void shortPasswords() {
+  void shortPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(10, 64, BreachDatabase.noop());
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(password -> policy.check(password) == Status.TOO_SHORT);
   }
 
   @Test
-  public void longPasswords() {
+  void longPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(8, 20, BreachDatabase.noop());
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(password -> policy.check(password) == Status.TOO_LONG);
   }
 
   @Test
-  public void weakPasswords() {
+  void weakPasswords() {
     final PasswordPolicy policy = new PasswordPolicy();
     qt().forAll(arbitrary().pick("password", "liverpool"))
         .check(password -> policy.check(password) == Status.WEAK);
   }
 
   @Test
-  public void breachedPasswords() {
+  void breachedPasswords() {
     final PasswordPolicy policy = new PasswordPolicy(8, 64, password -> true);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(password -> policy.check(password) == Status.BREACHED);
   }
 
   @Test
-  public void normalize() {
+  void normalize() {
     final byte[] normalized = {-61, -124, 102, 102, 105, 110};
-    assertArrayEquals(normalized, PasswordPolicy.normalize("Ä\uFB03n"));
+    assertThat(PasswordPolicy.normalize("Ä\uFB03n")).containsExactly(normalized);
 
     qt().forAll(strings().basicLatinAlphabet().ofLengthBetween(10, 20))
         .check(s -> s.equals(new String(PasswordPolicy.normalize(s), StandardCharsets.UTF_8)));
