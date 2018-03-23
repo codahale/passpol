@@ -42,7 +42,7 @@ public class Benchmarks {
   }
 
   @Benchmark
-  public Status test() {
+  public Status check() {
     return policy.check(PASSWORD);
   }
 
