@@ -84,7 +84,7 @@ public class PasswordPolicy {
   }
 
   private static boolean checkLen(String s, int min, int max) {
-    final int len = s.codePointCount(0, s.length());
+    final int len = codepoints(s);
     return min <= len && len <= max;
   }
 
@@ -110,7 +110,7 @@ public class PasswordPolicy {
    */
   @CheckReturnValue
   public Status check(String password) {
-    final int len = password.codePointCount(0, password.length());
+    final int len = codepoints(password);
 
     if (len < minLength) {
       return Status.TOO_SHORT;
@@ -133,5 +133,9 @@ public class PasswordPolicy {
     }
 
     return Status.OK;
+  }
+
+  private static int codepoints(String s) {
+    return s.codePointCount(0, s.length());
   }
 }
