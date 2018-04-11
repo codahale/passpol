@@ -42,11 +42,13 @@ public class PasswordPolicy {
 
   /**
    * Creates a {@link PasswordPolicy} with a minimum password length of {@code 8} and a maximum
-   * password length of {@code 64}, as recommended in {@code SP-800-63B 5.1.1.2}. Does not specify a
-   * {@link BreachDatabase} instance.
+   * password length of {@code 64}, as recommended in {@code SP-800-63B 5.1.1.2}. Uses the offline
+   * database of weak passwords.
+   *
+   * @see BreachDatabase#top100K()
    */
   public PasswordPolicy() {
-    this(8, 64, BreachDatabase.top100K());
+    this(BreachDatabase.top100K(), 8, 64);
   }
 
   /**
@@ -57,13 +59,13 @@ public class PasswordPolicy {
    * @param breachDatabase a {@link BreachDatabase} instance
    */
   public PasswordPolicy(
-      @Nonnegative int minLength, @Nonnegative int maxLength, BreachDatabase breachDatabase) {
+      BreachDatabase breachDatabase, @Nonnegative int minLength, @Nonnegative int maxLength) {
     if (maxLength < minLength) {
       throw new IllegalArgumentException("minLength must be less than maxLength");
     }
+    this.breachDatabase = breachDatabase;
     this.minLength = minLength;
     this.maxLength = maxLength;
-    this.breachDatabase = breachDatabase;
   }
 
   /**
@@ -88,7 +90,7 @@ public class PasswordPolicy {
    */
   @CheckReturnValue
   public Status check(String password) {
-    final int len = codepoints(password);
+    final int len = password.codePointCount(0, password.length());
 
     if (len < minLength) {
       return Status.TOO_SHORT;
@@ -107,9 +109,5 @@ public class PasswordPolicy {
     }
 
     return Status.OK;
-  }
-
-  private static int codepoints(String s) {
-    return s.codePointCount(0, s.length());
   }
 }

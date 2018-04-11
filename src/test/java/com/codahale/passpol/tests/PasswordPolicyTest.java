@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.codahale.passpol.BreachDatabase;
 import com.codahale.passpol.PasswordPolicy;
 import com.codahale.passpol.Status;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import org.quicktheories.WithQuickTheories;
@@ -28,7 +29,7 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void validPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 64, BreachDatabase.top100K());
+    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 8, 64);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(p -> policy.check(p) == Status.OK);
     qt().forAll(strings().ascii().ofLengthBetween(8, 64)).check(p -> policy.check(p) == Status.OK);
@@ -36,23 +37,36 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void shortPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(10, 64, BreachDatabase.top100K());
+    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 10, 64);
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(password -> policy.check(password) == Status.TOO_SHORT);
   }
 
   @Test
   void longPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 20, BreachDatabase.top100K());
+    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 8, 20);
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(password -> policy.check(password) == Status.TOO_LONG);
   }
 
   @Test
   void breachedPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 64, password -> true);
+    final PasswordPolicy policy = new PasswordPolicy(password -> true, 8, 64);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(password -> policy.check(password) == Status.BREACHED);
+  }
+
+  @Test
+  void failOpen() {
+    final PasswordPolicy policy =
+        new PasswordPolicy(
+            password -> {
+              throw new IOException("ok");
+            },
+            8,
+            64);
+    qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
+        .check(password -> policy.check(password) == Status.OK);
   }
 
   @Test
