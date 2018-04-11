@@ -23,7 +23,7 @@ import com.codahale.passpol.PasswordPolicy;
 
 class Example {
   void doIt() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 60, BreachDatabase.haveIBeenPwned());
+    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.haveIBeenPwned(), 8, 64);
     
     // validate good passwords
     System.out.println(policy.check("this is a good, long password")); 
