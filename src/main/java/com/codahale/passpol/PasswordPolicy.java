@@ -36,6 +36,12 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class PasswordPolicy {
 
+  /** The recommended minimum password length, per {@code SP-800-63B 5.1.1.2}. */
+  public static final int RECOMMENDED_MIN_LENGTH = 8;
+
+  /** The recommended maximum password length, per {@code SP-800-63B 5.1.1.2}. */
+  public static final int RECOMMENDED_MAX_LENGTH = 64;
+
   private final int minLength;
   private final int maxLength;
   private final BreachDatabase breachDatabase;
@@ -46,9 +52,11 @@ public class PasswordPolicy {
    * database of weak passwords.
    *
    * @see BreachDatabase#top100K()
+   * @see PasswordPolicy#RECOMMENDED_MIN_LENGTH
+   * @see PasswordPolicy#RECOMMENDED_MAX_LENGTH
    */
   public PasswordPolicy() {
-    this(BreachDatabase.top100K(), 8, 64);
+    this(BreachDatabase.top100K(), RECOMMENDED_MIN_LENGTH, RECOMMENDED_MAX_LENGTH);
   }
 
   /**

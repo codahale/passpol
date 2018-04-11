@@ -29,7 +29,11 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void validPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 8, 64);
+    final PasswordPolicy policy =
+        new PasswordPolicy(
+            BreachDatabase.top100K(),
+            PasswordPolicy.RECOMMENDED_MIN_LENGTH,
+            PasswordPolicy.RECOMMENDED_MAX_LENGTH);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(p -> policy.check(p) == Status.OK);
     qt().forAll(strings().ascii().ofLengthBetween(8, 64)).check(p -> policy.check(p) == Status.OK);
