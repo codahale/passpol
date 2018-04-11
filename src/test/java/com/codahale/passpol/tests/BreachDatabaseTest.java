@@ -36,8 +36,8 @@ class BreachDatabaseTest {
   }
 
   @Test
-  void allOf() throws IOException {
-    final BreachDatabase db = BreachDatabase.allOf("funk"::equals, "soul"::equals);
+  void anyOf() throws IOException {
+    final BreachDatabase db = BreachDatabase.anyOf("funk"::equals, "soul"::equals);
     assertThat(db.contains("funk")).isTrue();
     assertThat(db.contains("soul")).isTrue();
     assertThat(db.contains("brother")).isFalse();

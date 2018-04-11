@@ -54,7 +54,7 @@ public interface BreachDatabase {
    * @param databases a set of databases
    * @return a database which checks the given databases in order
    */
-  static BreachDatabase allOf(BreachDatabase... databases) {
+  static BreachDatabase anyOf(BreachDatabase... databases) {
     return password -> {
       for (BreachDatabase database : databases) {
         if (database.contains(password)) {
