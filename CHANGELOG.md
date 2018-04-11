@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.6.0: 2018-04-11
+
+* Moved top-100K password checking to a `BreachDatabase` implementation.
+* `PasswordPolicy` now requires a `BreachDatabase` instance.
+* Removed `Status.WEAK`.
+* Added `BreachDatabase.anyOf` for composing instances.
+
 ## v0.5.1: 2018-02-28
 
 * Added a `User-Agent` header to HaveIBeenPwned requests.
