@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Coda Hale (coda.hale@gmail.com)
+ * Copyright © 2018 Coda Hale (coda.hale@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,16 @@ class BreachDatabaseTest {
   }
 
   @Test
-  void noop() throws IOException {
-    assertThat(BreachDatabase.noop().contains("woo")).isFalse();
+  void top100K() throws IOException {
+    assertThat(BreachDatabase.top100K().contains("password")).isTrue();
+    assertThat(BreachDatabase.top100K().contains("8e29c409899d7782ef97")).isFalse();
+  }
+
+  @Test
+  void allOf() throws IOException {
+    final BreachDatabase db = BreachDatabase.allOf("funk"::equals, "soul"::equals);
+    assertThat(db.contains("funk")).isTrue();
+    assertThat(db.contains("soul")).isTrue();
+    assertThat(db.contains("brother")).isFalse();
   }
 }

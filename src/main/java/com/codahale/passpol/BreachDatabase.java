@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Coda Hale (coda.hale@gmail.com)
+ * Copyright © 2018 Coda Hale (coda.hale@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,28 @@ public interface BreachDatabase {
   }
 
   /**
-   * A no-op database.
+   * Returns an offline database of the 100,000 most common passwords.
    *
-   * @return a no-op database
+   * @return an offline database of the 100,000 most common passwords
    */
-  static BreachDatabase noop() {
-    return password -> false;
+  static BreachDatabase top100K() {
+    return new Top100K();
+  }
+
+  /**
+   * Returns a database which checks the given databases in order.
+   *
+   * @param databases a set of databases
+   * @return a database which checks the given databases in order
+   */
+  static BreachDatabase allOf(BreachDatabase... databases) {
+    return password -> {
+      for (BreachDatabase database : databases) {
+        if (database.contains(password)) {
+          return true;
+        }
+      }
+      return false;
+    };
   }
 }

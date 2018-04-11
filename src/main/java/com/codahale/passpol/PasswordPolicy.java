@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Coda Hale (coda.hale@gmail.com)
+ * Copyright © 2018 Coda Hale (coda.hale@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,10 @@
  */
 package com.codahale.passpol;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.Immutable;
@@ -43,7 +38,6 @@ public class PasswordPolicy {
 
   private final int minLength;
   private final int maxLength;
-  private final Set<String> weakPasswords;
   private final BreachDatabase breachDatabase;
 
   /**
@@ -52,7 +46,7 @@ public class PasswordPolicy {
    * {@link BreachDatabase} instance.
    */
   public PasswordPolicy() {
-    this(8, 64, BreachDatabase.noop());
+    this(8, 64, BreachDatabase.top100K());
   }
 
   /**
@@ -69,23 +63,7 @@ public class PasswordPolicy {
     }
     this.minLength = minLength;
     this.maxLength = maxLength;
-    this.weakPasswords = readPasswords(minLength, maxLength);
     this.breachDatabase = breachDatabase;
-  }
-
-  private static Set<String> readPasswords(int minLength, int maxLength) {
-    try (InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
-        InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
-        BufferedReader br = new BufferedReader(r)) {
-      return br.lines().filter(s -> checkLen(s, minLength, maxLength)).collect(Collectors.toSet());
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    }
-  }
-
-  private static boolean checkLen(String s, int min, int max) {
-    final int len = codepoints(s);
-    return min <= len && len <= max;
   }
 
   /**
@@ -118,10 +96,6 @@ public class PasswordPolicy {
 
     if (len > maxLength) {
       return Status.TOO_LONG;
-    }
-
-    if (weakPasswords.contains(password)) {
-      return Status.WEAK;
     }
 
     try {

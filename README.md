@@ -11,7 +11,7 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.5.1</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
@@ -39,11 +39,13 @@ class Example {
 
 ## How it works
 
-`PasswordPolicy` uses a list of 100,000 weak passwords from [Carey Li's
-NBP](https://cry.github.io/nbp/) project. Passwords are checked for minimum length, maximum length,
-and weakness. In addition, passwords can also be checked against databases of passwords recovered
-from major breaches. passpol provides support for checking passwords against [Have I Been
-Pwned?](https://haveibeenpwned.com)'s collection of breached passwords.
+`PasswordPolicy` checks passwords for minimum and maximum length (i.e. the number of Unicode
+codepoints in the string) and can check a set of breach databases to see if the password has been
+made public.
+
+The built-in breach databases include an offline list of 100,000 weak passwords from [Carey Li's
+NBP](https://cry.github.io/nbp/) project and an online client for checking passwords against [Have I
+Been Pwned?](https://haveibeenpwned.com)'s collection of breached passwords.
 
 `PasswordPolicy` also provides the means to normalize Unicode passwords into a canonical byte array
 representation suitable for inputting into a password hashing algorithm like `bcrypt`.

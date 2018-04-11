@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Coda Hale (coda.hale@gmail.com)
+ * Copyright © 2018 Coda Hale (coda.hale@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void validPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 64, BreachDatabase.noop());
+    final PasswordPolicy policy = new PasswordPolicy(8, 64, BreachDatabase.top100K());
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(p -> policy.check(p) == Status.OK);
     qt().forAll(strings().ascii().ofLengthBetween(8, 64)).check(p -> policy.check(p) == Status.OK);
@@ -36,23 +36,16 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void shortPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(10, 64, BreachDatabase.noop());
+    final PasswordPolicy policy = new PasswordPolicy(10, 64, BreachDatabase.top100K());
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(password -> policy.check(password) == Status.TOO_SHORT);
   }
 
   @Test
   void longPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(8, 20, BreachDatabase.noop());
+    final PasswordPolicy policy = new PasswordPolicy(8, 20, BreachDatabase.top100K());
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(password -> policy.check(password) == Status.TOO_LONG);
-  }
-
-  @Test
-  void weakPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy();
-    qt().forAll(arbitrary().pick("password", "liverpool"))
-        .check(password -> policy.check(password) == Status.WEAK);
   }
 
   @Test

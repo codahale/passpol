@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Coda Hale (coda.hale@gmail.com)
+ * Copyright © 2018 Coda Hale (coda.hale@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,6 @@ public enum Status {
 
   /** The candidate password is too long. */
   TOO_LONG,
-
-  /** The candidate password is on the weak passwords list. */
-  WEAK,
 
   /** The candidate password has previously appeared in a data breach. */
   BREACHED
