@@ -26,6 +26,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 class HaveIBeenPwned implements BreachDatabase {
+  private final int threshold;
+
+  HaveIBeenPwned(int threshold) {
+    this.threshold = threshold;
+  }
+
   @Override
   public boolean contains(String password) throws IOException {
     try {
@@ -43,9 +49,13 @@ class HaveIBeenPwned implements BreachDatabase {
       try (InputStream in = conn.getInputStream();
           InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
           BufferedReader reader = new BufferedReader(r)) {
-        return reader.lines().anyMatch(s -> s.startsWith(suffix));
+        return reader
+            .lines()
+            .filter(s -> s.startsWith(suffix))
+            .mapToInt(s -> Integer.parseInt(s.split(":", 2)[1]))
+            .anyMatch(t -> t >= threshold);
       }
-    } catch (NoSuchAlgorithmException e) {
+    } catch (NoSuchAlgorithmException | ArrayIndexOutOfBoundsException e) {
       throw new IOException(e);
     }
   }

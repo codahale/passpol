@@ -31,12 +31,23 @@ public interface BreachDatabase {
 
   /**
    * A client for <a href="https://haveibeenpwned.com/">Have I Been Pwned</a>'s online password
-   * checking. Passwords are hashed with SHA-1 before being sent.
+   * checking. Uses a k-anonymous API which transmits only 20 bits of a password hash.
    *
    * @return an online database of breached passwords
    */
   static BreachDatabase haveIBeenPwned() {
-    return new HaveIBeenPwned();
+    return haveIBeenPwned(1);
+  }
+
+  /**
+   * A client for <a href="https://haveibeenpwned.com/">Have I Been Pwned</a>'s online password
+   * checking. Uses a k-anonymous API which transmits only 20 bits of a password hash.
+   *
+   * @param threshold The number of breaches a password can be found in which makes it invalid.
+   * @return an online database of breached passwords
+   */
+  static BreachDatabase haveIBeenPwned(int threshold) {
+    return new HaveIBeenPwned(threshold);
   }
 
   /**
