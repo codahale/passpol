@@ -11,7 +11,7 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
 </dependency>
 ```
 
@@ -23,7 +23,7 @@ import com.codahale.passpol.PasswordPolicy;
 
 class Example {
   void doIt() {
-    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.haveIBeenPwned(), 8, 64);
+    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.haveIBeenPwned(5), 8, 64);
     
     // validate good passwords
     System.out.println(policy.check("this is a good, long password")); 

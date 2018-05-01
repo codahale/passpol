@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.6.1: 2018-05-01
+
+* Added Have I Been Pwned threshold as a parameter.
+
 ## v0.6.0: 2018-04-11
 
 * Moved top-100K password checking to a `BreachDatabase` implementation.
