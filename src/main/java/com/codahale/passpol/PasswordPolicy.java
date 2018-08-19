@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnegative;
-import javax.annotation.concurrent.Immutable;
+import org.jetbrains.annotations.Contract;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -33,7 +31,6 @@ import javax.annotation.concurrent.Immutable;
  * @see <a href="https://pages.nist.gov/800-63-3/">Draft NIST SP-800-63B</a>
  * @see <a href="https://cry.github.io/nbp/">NBP</a>
  */
-@Immutable
 public class PasswordPolicy {
 
   /** The recommended minimum password length, per {@code SP-800-63B 5.1.1.2}. */
@@ -66,8 +63,7 @@ public class PasswordPolicy {
    * @param maxLength the maximum length of passwords
    * @param breachDatabase a {@link BreachDatabase} instance
    */
-  public PasswordPolicy(
-      BreachDatabase breachDatabase, @Nonnegative int minLength, @Nonnegative int maxLength) {
+  public PasswordPolicy(BreachDatabase breachDatabase, int minLength, int maxLength) {
     if (maxLength < minLength) {
       throw new IllegalArgumentException("minLength must be less than maxLength");
     }
@@ -85,7 +81,7 @@ public class PasswordPolicy {
    * @param password an arbitrary string
    * @return a series of bytes suitable for hashing
    */
-  @CheckReturnValue
+  @Contract(pure = true)
   public static byte[] normalize(String password) {
     return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
   }
@@ -96,7 +92,6 @@ public class PasswordPolicy {
    * @param password a candidate password
    * @return the status of {@code password}
    */
-  @CheckReturnValue
   public Status check(String password) {
     final int len = password.codePointCount(0, password.length());
 
