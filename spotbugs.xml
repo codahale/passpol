@@ -15,4 +15,13 @@
     limitations under the License.
 
 -->
-<FindBugsFilter/>
+<FindBugsFilter>
+  <!--
+  Spotbugs doesn't recognize the new try-with-resources bytecode from Java 11 yet.
+  https://github.com/spotbugs/spotbugs/issues/600
+  -->
+  <Match>
+    <Class name="com.codahale.passpol.Top100K"/>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+  </Match>
+</FindBugsFilter>
