@@ -25,7 +25,7 @@
   </parent>
 
   <artifactId>passpol</artifactId>
-  <version>0.6.2</version>
+  <version>0.6.3-SNAPSHOT</version>
   <name>passpol</name>
   <url>https://github.com/codahale/passpol</url>
   <description>
@@ -37,7 +37,7 @@
     <connection>scm:git:https://github.com/codahale/passpol.git</connection>
     <developerConnection>scm:git:https://github.com/codahale/passpol.git</developerConnection>
     <url>https://github.com/codahale/passpol</url>
-    <tag>v0.6.2</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
