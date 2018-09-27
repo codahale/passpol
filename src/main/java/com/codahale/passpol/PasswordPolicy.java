@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import org.jetbrains.annotations.Contract;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -81,7 +80,6 @@ public class PasswordPolicy {
    * @param password an arbitrary string
    * @return a series of bytes suitable for hashing
    */
-  @Contract(pure = true)
   public static byte[] normalize(String password) {
     return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
   }
