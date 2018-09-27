@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.6.2: 2018-09-26
+
+* Removed JSR-305 annotations.
+* Added automatic module name.
+
 ## v0.6.1: 2018-05-01
 
 * Added Have I Been Pwned threshold as a parameter.

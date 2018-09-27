@@ -1,6 +1,6 @@
 # Passpol
 
-[![Build Status](https://secure.travis-ci.org/codahale/passpol.svg)](http://travis-ci.org/codahale/passpol)
+[![CircleCI](https://circleci.com/gh/codahale/passpol.svg?style=svg)](https://circleci.com/gh/codahale/passpol)
 
 A Java library for validating passwords against [NIST SP-800-63B](https://pages.nist.gov/800-63-3/)
 requirements.
@@ -11,9 +11,11 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.6.1</version>
+  <version>0.6.2</version>
 </dependency>
 ```
+
+*Note: module name for Java 9+ is `com.codahale.passpol`.*
 
 ## Use the thing
 
