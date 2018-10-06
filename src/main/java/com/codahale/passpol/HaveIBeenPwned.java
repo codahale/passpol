@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Pattern;
 
 class HaveIBeenPwned implements BreachDatabase {
   private final HttpClient client;
@@ -48,12 +49,13 @@ class HaveIBeenPwned implements BreachDatabase {
       if (response.statusCode() != 200) {
         throw new IOException("Unexpected response from server: " + response.statusCode());
       }
+      final Pattern pattern = Pattern.compile("^" + suffix + ":([\\d]+)$");
       return response
           .body()
-          .filter(s -> s.startsWith(suffix))
-          .mapToInt(s -> Integer.parseInt(s.split(":", 2)[1]))
+          .flatMap(s -> pattern.matcher(s).results())
+          .mapToInt(r -> Integer.parseInt(r.group(1)))
           .anyMatch(t -> t >= threshold);
-    } catch (NoSuchAlgorithmException | ArrayIndexOutOfBoundsException | InterruptedException e) {
+    } catch (NoSuchAlgorithmException | InterruptedException e) {
       throw new IOException(e);
     }
   }
