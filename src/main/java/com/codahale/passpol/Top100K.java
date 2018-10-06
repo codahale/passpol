@@ -17,7 +17,6 @@ package com.codahale.passpol;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
@@ -27,10 +26,10 @@ class Top100K implements BreachDatabase {
   private final Set<String> passwords;
 
   Top100K() {
-    try (InputStream in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
-        InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8);
-        BufferedReader br = new BufferedReader(r)) {
-      this.passwords = br.lines().collect(Collectors.toSet());
+    try (var in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
+        var r = new InputStreamReader(in, StandardCharsets.UTF_8);
+        var br = new BufferedReader(r)) {
+      this.passwords = br.lines().collect(Collectors.toUnmodifiableSet());
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }

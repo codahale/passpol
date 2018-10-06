@@ -15,23 +15,23 @@
  */
 package com.codahale.passpol;
 
-import com.google.common.io.ByteStreams;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 
 public class Download {
 
-  private static final String LIST_URL =
-      "https://raw.githubusercontent.com/cry/nbp/master/build_collection/top100000";
-  private static final String LIST_FILENAME =
-      "src/main/resources/com/codahale/passpol/weak-passwords.txt";
+  private static final String URL =
+      "https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-100000.txt";
+  private static final String FILE = "src/main/resources/com/codahale/passpol/weak-passwords.txt";
 
-  public static void main(String[] args) throws Exception {
-    try (InputStream in = new URL(LIST_URL).openStream();
-        OutputStream out = new FileOutputStream(LIST_FILENAME)) {
-      ByteStreams.copy(in, out);
-    }
+  public static void main(String[] args) throws IOException, InterruptedException {
+    HttpClient.newHttpClient()
+        .send(
+            HttpRequest.newBuilder().uri(URI.create(URL)).GET().build(),
+            HttpResponse.BodyHandlers.ofFile(Paths.get(FILE)));
   }
 }

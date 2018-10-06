@@ -29,7 +29,7 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void validPasswords() {
-    final PasswordPolicy policy =
+    var policy =
         new PasswordPolicy(
             BreachDatabase.top100K(),
             PasswordPolicy.RECOMMENDED_MIN_LENGTH,
@@ -41,28 +41,28 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void shortPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 10, 64);
+    var policy = new PasswordPolicy(BreachDatabase.top100K(), 10, 64);
     qt().forAll(strings().ascii().ofLengthBetween(1, 9))
         .check(password -> policy.check(password) == Status.TOO_SHORT);
   }
 
   @Test
   void longPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(BreachDatabase.top100K(), 8, 20);
+    var policy = new PasswordPolicy(BreachDatabase.top100K(), 8, 20);
     qt().forAll(strings().ascii().ofLengthBetween(21, 30))
         .check(password -> policy.check(password) == Status.TOO_LONG);
   }
 
   @Test
   void breachedPasswords() {
-    final PasswordPolicy policy = new PasswordPolicy(password -> true, 8, 64);
+    var policy = new PasswordPolicy(password -> true, 8, 64);
     qt().forAll(strings().allPossible().ofLengthBetween(20, 30))
         .check(password -> policy.check(password) == Status.BREACHED);
   }
 
   @Test
   void failOpen() {
-    final PasswordPolicy policy =
+    var policy =
         new PasswordPolicy(
             password -> {
               throw new IOException("ok");
@@ -75,7 +75,7 @@ class PasswordPolicyTest implements WithQuickTheories {
 
   @Test
   void normalize() {
-    final byte[] normalized = {-61, -124, 102, 102, 105, 110};
+    var normalized = new byte[] {-61, -124, 102, 102, 105, 110};
     assertThat(PasswordPolicy.normalize("Ä\uFB03n")).containsExactly(normalized);
 
     qt().forAll(strings().basicLatinAlphabet().ofLengthBetween(10, 20))

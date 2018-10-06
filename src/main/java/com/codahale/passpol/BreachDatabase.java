@@ -16,6 +16,7 @@
 package com.codahale.passpol;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 
 /** A database of passwords found in data breaches. */
 public interface BreachDatabase {
@@ -47,7 +48,19 @@ public interface BreachDatabase {
    * @return an online database of breached passwords
    */
   static BreachDatabase haveIBeenPwned(int threshold) {
-    return new HaveIBeenPwned(threshold);
+    return haveIBeenPwned(HttpClient.newHttpClient(), threshold);
+  }
+
+  /**
+   * A client for <a href="https://haveibeenpwned.com/">Have I Been Pwned</a>'s online password
+   * checking. Uses a k-anonymous API which transmits only 20 bits of a password hash.
+   *
+   * @param client The HTTP client to use
+   * @param threshold The number of breaches a password can be found in which makes it invalid.
+   * @return an online database of breached passwords
+   */
+  static BreachDatabase haveIBeenPwned(HttpClient client, int threshold) {
+    return new HaveIBeenPwned(client, threshold);
   }
 
   /**
@@ -67,7 +80,7 @@ public interface BreachDatabase {
    */
   static BreachDatabase anyOf(BreachDatabase... databases) {
     return password -> {
-      for (BreachDatabase database : databases) {
+      for (var database : databases) {
         if (database.contains(password)) {
           return true;
         }

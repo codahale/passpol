@@ -91,7 +91,7 @@ public class PasswordPolicy {
    * @return the status of {@code password}
    */
   public Status check(String password) {
-    final int len = password.codePointCount(0, password.length());
+    var len = password.codePointCount(0, password.length());
 
     if (len < minLength) {
       return Status.TOO_SHORT;

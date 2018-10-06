@@ -19,14 +19,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codahale.passpol.BreachDatabase;
 import java.io.IOException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class BreachDatabaseTest {
 
   @Test
   void haveIBeenPwned() throws IOException {
-    assertThat(BreachDatabase.haveIBeenPwned(100).contains("password")).isTrue();
-    assertThat(BreachDatabase.haveIBeenPwned(100).contains("8e29c409899d7782ef97")).isFalse();
+    Assertions.assertThat(BreachDatabase.haveIBeenPwned().contains("password")).isTrue();
+    assertThat(BreachDatabase.haveIBeenPwned().contains("8e29c409899d7782ef97")).isFalse();
   }
 
   @Test
