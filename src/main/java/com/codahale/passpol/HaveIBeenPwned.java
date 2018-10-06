@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class HaveIBeenPwned implements BreachDatabase {
@@ -52,8 +53,10 @@ class HaveIBeenPwned implements BreachDatabase {
       final Pattern pattern = Pattern.compile("^" + suffix + ":([\\d]+)$");
       return response
           .body()
-          .flatMap(s -> pattern.matcher(s).results())
-          .mapToInt(r -> Integer.parseInt(r.group(1)))
+          .map(pattern::matcher)
+          .flatMap(Matcher::results)
+          .map(r -> r.group(1))
+          .mapToInt(Integer::parseInt)
           .anyMatch(t -> t >= threshold);
     } catch (NoSuchAlgorithmException | InterruptedException e) {
       throw new IOException(e);
