@@ -63,10 +63,15 @@ class HaveIBeenPwned implements BreachDatabase {
     }
   }
 
+  private static final char[] HEX = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+  };
+
   private static String hex(byte[] bytes) {
     var b = new StringBuilder(bytes.length * 2);
     for (var v : bytes) {
-      b.append(String.format("%02X", v));
+      b.append(HEX[(v & 0xFF) >> 4]);
+      b.append(HEX[(v & 0x0F)]);
     }
     return b.toString();
   }
