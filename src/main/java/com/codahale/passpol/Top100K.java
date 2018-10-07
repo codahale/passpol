@@ -27,9 +27,8 @@ class Top100K implements BreachDatabase {
 
   Top100K() {
     try (var in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
-        var r = new InputStreamReader(in, StandardCharsets.UTF_8);
-        var br = new BufferedReader(r)) {
-      this.passwords = br.lines().collect(Collectors.toUnmodifiableSet());
+        var r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+      this.passwords = r.lines().collect(Collectors.toUnmodifiableSet());
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }

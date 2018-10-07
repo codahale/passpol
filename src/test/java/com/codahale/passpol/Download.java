@@ -29,9 +29,7 @@ public class Download {
   private static final String FILE = "src/main/resources/com/codahale/passpol/weak-passwords.txt";
 
   public static void main(String[] args) throws IOException, InterruptedException {
-    HttpClient.newHttpClient()
-        .send(
-            HttpRequest.newBuilder().uri(URI.create(URL)).GET().build(),
-            HttpResponse.BodyHandlers.ofFile(Paths.get(FILE)));
+    final HttpRequest req = HttpRequest.newBuilder().uri(URI.create(URL)).GET().build();
+    HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofFile(Paths.get(FILE)));
   }
 }
