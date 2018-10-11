@@ -35,6 +35,16 @@ public class Benchmarks {
   private final PasswordPolicy policy = new PasswordPolicy();
 
   @Benchmark
+  public long charsStream() {
+    return PASSWORD.codePoints().count();
+  }
+
+  @Benchmark
+  public long charsRange() {
+    return PASSWORD.codePointCount(0, PASSWORD.length());
+  }
+
+  @Benchmark
   public Status check() {
     return policy.check(PASSWORD);
   }
