@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class HaveIBeenPwned implements BreachDatabase {
+  private static final URI BASE_URI = URI.create("https://api.pwnedpasswords.com/range/");
   private final HttpClient client;
   private final int threshold;
 
@@ -38,11 +39,10 @@ class HaveIBeenPwned implements BreachDatabase {
   public boolean contains(String password) throws IOException {
     try {
       var hash = hex(MessageDigest.getInstance("SHA1").digest(PasswordPolicy.normalize(password)));
-      var prefix = hash.substring(0, 5);
-      var suffix = hash.substring(5);
+      var pattern = Pattern.compile("^" + hash.substring(5) + ":([\\d]+)$");
       var request =
           HttpRequest.newBuilder()
-              .uri(URI.create("https://api.pwnedpasswords.com/range/" + prefix))
+              .uri(BASE_URI.resolve(hash.substring(0, 5)))
               .GET()
               .header("User-Agent", "passpol")
               .build();
@@ -50,7 +50,6 @@ class HaveIBeenPwned implements BreachDatabase {
       if (response.statusCode() != 200) {
         throw new IOException("Unexpected response from server: " + response.statusCode());
       }
-      final Pattern pattern = Pattern.compile("^" + suffix + ":([\\d]+)$");
       return response
           .body()
           .map(pattern::matcher)
