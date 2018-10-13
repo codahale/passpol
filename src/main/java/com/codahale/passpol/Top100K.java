@@ -23,10 +23,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 class Top100K implements BreachDatabase {
+  private static final Top100K INSTANCE = new Top100K();
   private final Set<String> passwords;
 
-  Top100K() {
-    try (var in = PasswordPolicy.class.getResourceAsStream("weak-passwords.txt");
+  static Top100K instance() {
+    return INSTANCE;
+  }
+
+  private Top100K() {
+    try (var in = getClass().getResourceAsStream("weak-passwords.txt");
         var r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
       this.passwords = r.lines().collect(Collectors.toUnmodifiableSet());
     } catch (IOException e) {

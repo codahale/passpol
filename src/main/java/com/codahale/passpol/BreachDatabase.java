@@ -69,7 +69,7 @@ public interface BreachDatabase {
    * @return an offline database of the 100,000 most common passwords
    */
   static BreachDatabase top100K() {
-    return new Top100K();
+    return Top100K.instance();
   }
 
   /**
