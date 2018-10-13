@@ -42,8 +42,8 @@ class HaveIBeenPwned implements BreachDatabase {
       var pattern = Pattern.compile("^" + hash.substring(5) + ":([\\d]+)$");
       var request =
           HttpRequest.newBuilder()
-              .uri(BASE_URI.resolve(hash.substring(0, 5)))
               .GET()
+              .uri(BASE_URI.resolve(hash.substring(0, 5)))
               .header("User-Agent", "passpol")
               .build();
       var response = client.send(request, BodyHandlers.ofLines());
