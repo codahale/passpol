@@ -15,7 +15,11 @@ requirements.
 </dependency>
 ```
 
-*Note: module name for Java 9+ is `com.codahale.passpol`.*
+```java
+module net.example.yours {
+  requires com.codahale.passpol;
+}
+```
 
 ## Use the thing
 
