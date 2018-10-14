@@ -15,8 +15,12 @@
  */
 package com.codahale.passpol;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 /** A database of passwords found in data breaches. */
 public interface BreachDatabase {
@@ -64,12 +68,27 @@ public interface BreachDatabase {
   }
 
   /**
+   * Returns an offline database of the given passwords.
+   *
+   * @param passwords a collection of unusable passwords
+   * @return an offline database of the given passwords
+   */
+  static BreachDatabase passwordSet(Collection<String> passwords) {
+    return new PasswordSet(passwords);
+  }
+
+  /**
    * Returns an offline database of the 100,000 most common passwords.
    *
    * @return an offline database of the 100,000 most common passwords
    */
   static BreachDatabase top100K() {
-    return Top100K.instance();
+    try (var in = BreachDatabase.class.getResourceAsStream("weak-passwords.txt");
+        var r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
+      return new PasswordSet(r.lines());
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
   /**

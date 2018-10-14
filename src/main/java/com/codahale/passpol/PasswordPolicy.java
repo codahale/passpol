@@ -17,8 +17,6 @@ package com.codahale.passpol;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -81,7 +79,7 @@ public class PasswordPolicy {
    * @return a series of bytes suitable for hashing
    */
   public static byte[] normalize(String password) {
-    return Normalizer.normalize(password, Form.NFKC).getBytes(StandardCharsets.UTF_8);
+    return PasswordSet.normalize(password).getBytes(StandardCharsets.UTF_8);
   }
 
   /**
