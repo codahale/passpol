@@ -45,9 +45,8 @@ class Example {
 codepoints in the string) and can check a set of breach databases to see if the password has been
 made public.
 
-The built-in breach databases include an offline list of 100,000 weak passwords from [Carey Li's
-NBP](https://cry.github.io/nbp/) project and an online client for checking passwords against [Have I
-Been Pwned?](https://haveibeenpwned.com)'s collection of breached passwords.
+The built-in breach databases include an offline list of 100,000 weak passwords from the [SecList
+Project](https://github.com/danielmiessler/SecLists)'s collection of breached passwords.
 
 `PasswordPolicy` also provides the means to normalize Unicode passwords into a canonical byte array
 representation suitable for inputting into a password hashing algorithm like `bcrypt`.
