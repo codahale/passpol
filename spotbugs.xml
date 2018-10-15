@@ -21,7 +21,7 @@
   https://github.com/spotbugs/spotbugs/issues/600
   -->
   <Match>
-    <Class name="com.codahale.passpol.PasswordSet"/>
+    <Class name="com.codahale.passpol.BreachDatabase"/>
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
   </Match>
 </FindBugsFilter>
