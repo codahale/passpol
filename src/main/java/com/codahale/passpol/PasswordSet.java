@@ -16,6 +16,7 @@
 package com.codahale.passpol;
 
 import java.text.Normalizer;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,6 +27,28 @@ class PasswordSet implements BreachDatabase {
 
   PasswordSet(Stream<String> passwords) {
     this.passwords = passwords.map(PasswordSet::normalize).collect(Collectors.toUnmodifiableSet());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    var that = (PasswordSet) o;
+    return Objects.equals(passwords, that.passwords);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(passwords);
+  }
+
+  @Override
+  public String toString() {
+    return passwords.toString();
   }
 
   @Override
