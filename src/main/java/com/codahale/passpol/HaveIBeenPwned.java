@@ -22,10 +22,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class HaveIBeenPwned implements BreachDatabase {
+  private static final int HASH_LENGTH = (160 / 8) * 2;
+  private static final int PREFIX_LENGTH = 5;
+  private static final int SUFFIX_LENGTH = HASH_LENGTH - PREFIX_LENGTH;
+  private static final int DELIM_LENGTH = 1;
   private static final URI BASE_URI = URI.create("https://api.pwnedpasswords.com/range/");
   private final HttpClient client;
   private final int threshold;
@@ -39,11 +41,10 @@ class HaveIBeenPwned implements BreachDatabase {
   public boolean contains(String password) throws IOException {
     try {
       var hash = hex(MessageDigest.getInstance("SHA1").digest(PasswordPolicy.normalize(password)));
-      var pattern = Pattern.compile("^" + hash.substring(5) + ":([\\d]+)$");
       var request =
           HttpRequest.newBuilder()
               .GET()
-              .uri(BASE_URI.resolve(hash.substring(0, 5)))
+              .uri(BASE_URI.resolve(hash.substring(0, PREFIX_LENGTH)))
               .header("User-Agent", "passpol")
               .build();
       var response = client.send(request, BodyHandlers.ofLines());
@@ -52,12 +53,11 @@ class HaveIBeenPwned implements BreachDatabase {
       }
       return response
           .body()
-          .map(pattern::matcher)
-          .flatMap(Matcher::results)
-          .map(r -> r.group(1))
+          .filter(s -> s.regionMatches(0, hash, PREFIX_LENGTH, SUFFIX_LENGTH))
+          .map(s -> s.substring(HASH_LENGTH + DELIM_LENGTH))
           .mapToInt(Integer::parseInt)
           .anyMatch(t -> t >= threshold);
-    } catch (NoSuchAlgorithmException | InterruptedException e) {
+    } catch (NoSuchAlgorithmException | InterruptedException | IndexOutOfBoundsException e) {
       throw new IOException(e);
     }
   }
@@ -67,7 +67,7 @@ class HaveIBeenPwned implements BreachDatabase {
   };
 
   private static String hex(byte[] bytes) {
-    var b = new StringBuilder(bytes.length * 2);
+    var b = new StringBuilder(HASH_LENGTH);
     for (var v : bytes) {
       b.append(HEX[(v & 0xFF) >> 4]);
       b.append(HEX[(v & 0x0F)]);
