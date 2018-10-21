@@ -34,7 +34,7 @@ class PasswordSet implements BreachDatabase {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof PasswordSet)) {
       return false;
     }
     var that = (PasswordSet) o;
