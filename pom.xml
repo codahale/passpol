@@ -21,7 +21,7 @@
   <parent>
     <groupId>com.codahale</groupId>
     <artifactId>common-pom</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.16</version>
   </parent>
 
   <artifactId>passpol</artifactId>
@@ -41,7 +41,7 @@
   </scm>
 
   <properties>
-    <java.version>12</java.version>
+    <java.version>11</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
