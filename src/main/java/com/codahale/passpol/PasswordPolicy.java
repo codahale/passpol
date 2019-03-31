@@ -17,6 +17,7 @@ package com.codahale.passpol;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * A password policy which validates candidate passwords according to NIST's draft {@code
@@ -79,7 +80,7 @@ public class PasswordPolicy {
    * @return a series of bytes suitable for hashing
    */
   public static byte[] normalize(String password) {
-    return PasswordSet.normalize(password).getBytes(StandardCharsets.UTF_8);
+    return PasswordSet.normalize(Objects.requireNonNull(password)).getBytes(StandardCharsets.UTF_8);
   }
 
   /**
@@ -89,7 +90,7 @@ public class PasswordPolicy {
    * @return the status of {@code password}
    */
   public Status check(String password) {
-    var len = password.codePointCount(0, password.length());
+    var len = Objects.requireNonNull(password).codePointCount(0, password.length());
 
     if (len < minLength) {
       return Status.TOO_SHORT;

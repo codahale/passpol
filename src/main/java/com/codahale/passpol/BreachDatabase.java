@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Objects;
 
 /** A database of passwords found in data breaches. */
 public interface BreachDatabase {
@@ -64,7 +65,7 @@ public interface BreachDatabase {
    * @return an online database of breached passwords
    */
   static BreachDatabase haveIBeenPwned(HttpClient client, int threshold) {
-    return new HaveIBeenPwned(client, threshold);
+    return new HaveIBeenPwned(Objects.requireNonNull(client), threshold);
   }
 
   /**
@@ -74,7 +75,7 @@ public interface BreachDatabase {
    * @return an offline database of the given passwords
    */
   static BreachDatabase passwordSet(Collection<String> passwords) {
-    return new PasswordSet(passwords.stream());
+    return new PasswordSet(Objects.requireNonNull(passwords).stream());
   }
 
   /**
@@ -98,6 +99,10 @@ public interface BreachDatabase {
    * @return a database which checks the given databases in order
    */
   static BreachDatabase anyOf(BreachDatabase... databases) {
+    for (var database : databases) {
+      Objects.requireNonNull(database);
+    }
+
     return password -> {
       for (var database : databases) {
         if (database.contains(password)) {
