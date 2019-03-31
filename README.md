@@ -2,8 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/codahale/passpol.svg?style=svg)](https://circleci.com/gh/codahale/passpol)
 
-A Java library for validating passwords against [NIST SP-800-63B](https://pages.nist.gov/800-63-3/)
-requirements.
+A Java 12 library for validating passwords against [NIST
+SP-800-63B](https://pages.nist.gov/800-63-3/) requirements.
 
 ## Add to your project
 
@@ -11,7 +11,7 @@ requirements.
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>passpol</artifactId>
-  <version>0.6.2</version>
+  <version>0.7.0</version>
 </dependency>
 ```
 
@@ -57,6 +57,6 @@ representation suitable for inputting into a password hashing algorithm like `bc
 
 ## License
 
-Copyright © 2017-2018 Coda Hale
+Copyright © 2017-2019 Coda Hale
 
 Distributed under the Apache License 2.0.

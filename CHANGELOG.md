@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.7.0: 2019-03-31
+
+* Upgraded to Java 12.
+* Rewrote HaveIBeenPwned client to use `java.net.http`.
+* Added formal module definition.
+* Added support for arbitrary sets of breached passwords.
+
 ## v0.6.2: 2018-09-26
 
 * Removed JSR-305 annotations.
